@@ -4,3 +4,11 @@ userName varchar(20) NOT null,
 email varchar(40) NOT null,
 `password` varchar(100) NOT null,
 address varchar(40) DEFAULT '')
+
+CREATE TABLE products
+(productid int AUTO_INCREMENT NOT null PRIMARY KEY,
+productName varchar(10) NOT null,
+price int NOT null,
+stock int NOT null,
+decription varchar(100) DEFAULT '')
+
