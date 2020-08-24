@@ -1,16 +1,22 @@
 <?php
-    session_start();
-    $email = $_POST["$emailTextBox"];
-    $password = $_POST["$passwordTextBox"];
-    if($email != "" and $password != "") {
-        $hash = hash('sha256', $password);
-        $sql = <<<multi
-            SELECT * FROM `users`
-            WHERE email="$email" AND password="$hash"
-        multi;
-        $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
-        mysqli_query($link, $sql);
+    if(isset($_POST["submit"])) {
+        // echo("OK");
+        $email = $_POST["emailTextBox"];
+        $password = $_POST["passwordTextBox"];
+        if($email != "" and $password != "") {
+            $hash = hash('sha256', $password);
+            $sql = <<<multi
+                SELECT * FROM `users`
+                WHERE email="$email" AND password="$hash"
+            multi;
+            require_once("config.php");
+            $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+            $result = mysqli_query($link, $sql);
+            $row = mysqli_fetch_assoc($result);
+            var_dump($row);
+        }
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
