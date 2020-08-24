@@ -1,3 +1,16 @@
+<?php
+    session_start();
+    $userName = "";
+    if(isset($_SESSION["userName"])) {
+        $userName = $_SESSION["userName"];
+        // var_dump($userName);
+    }
+    if(isset($_GET["logout"])) {
+        unset($_SESSION["userName"]);
+        header("Location: index.php");
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -118,14 +131,23 @@
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
-                           
-                            <div class="header__top__right__auth">
-                                <a href="login.php"><i class="fa fa-user"></i> Login</a>
-                            </div> 
-                            |
-                            <div class="header__top__right__auth">
-                                <a href="signup.php">SignUp</a>
-                            </div>
+                            <?php if($userName==null) { ?>
+                                <div class="header__top__right__auth">
+                                    <a href="login.php"><i class="fa fa-user"></i> Login</a>
+                                </div> 
+                                |
+                                <div class="header__top__right__auth">
+                                    <a href="signup.php">SignUp</a>
+                                </div>
+                            <?php } else { ?>
+                                <div class="header__top__right__auth">
+                                    <a href="#"><i class="fa fa-user"></i> <?= $userName ?></a>
+                                </div> 
+                                |
+                                <div class="header__top__right__auth">
+                                    <a href="index.php?logout=1">SignOut</a>
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

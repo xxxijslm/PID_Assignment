@@ -20,7 +20,7 @@
             $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
             mysqli_query($link, $sql);
 
-            header("Location: index.html");
+            header("Location: index.php");
         }
         else {
             $err = "*輸入密碼不一致";

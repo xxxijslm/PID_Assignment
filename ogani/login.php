@@ -1,6 +1,6 @@
 <?php
+    session_start();
     if(isset($_POST["submit"])) {
-        // echo("OK");
         $email = $_POST["emailTextBox"];
         $password = $_POST["passwordTextBox"];
         if($email != "" and $password != "") {
@@ -13,7 +13,14 @@
             $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
             $result = mysqli_query($link, $sql);
             $row = mysqli_fetch_assoc($result);
-            var_dump($row);
+            // var_dump($row["userName"]);
+            if ($row) {
+                $_SESSION["userName"] = $row["userName"];
+                header("Location: index.php");
+            }
+            else {
+                $err="帳號或密碼錯誤！請重新輸入";
+            }
         }
     }
     
@@ -31,6 +38,9 @@
         .container {
             margin-top: 20px;
         }
+        span {
+            color: red;
+        }
     </style>
 </head>
 
@@ -40,7 +50,7 @@
             <div class="form-group row">
                 <label for="email" class="col-4 col-form-label">帳號：</label>
                 <div class="col-8">
-                    <input id="emailTextBox" name="emailTextBox" placeholder="Email" type="email" class="form-control" required="required">
+                    <input id="emailTextBox" name="emailTextBox" placeholder="Email" type="email" class="form-control" value="<?= $email?>" required="required">
                 </div>
             </div>
             <div class="form-group row">
@@ -54,6 +64,7 @@
                 <div class="offset-4 col-8">
                     <button name="submit" type="submit" class="btn btn-success">登入</button>
                     <button name="cancel" type="cancel" class="btn btn-danger">取消</button>
+                    <span><?= $err ?></span>
                 </div>
             </div>
         </form>
