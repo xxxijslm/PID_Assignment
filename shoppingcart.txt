@@ -1,0 +1,298 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:8889
+-- Generation Time: Aug 25, 2020 at 09:56 AM
+-- Server version: 5.7.26
+-- PHP Version: 7.4.2
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Database: `shoppingCart`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cartDetails`
+--
+
+CREATE TABLE `cartDetails` (
+  `userId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `quantity` smallint(6) NOT NULL DEFAULT '0',
+  `cartId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `cartDetails`
+--
+
+INSERT INTO `cartDetails` (`userId`, `productId`, `price`, `quantity`, `cartId`) VALUES
+(1, 4, '200.00', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `categoryId` int(11) NOT NULL,
+  `categoryName` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`categoryId`, `categoryName`) VALUES
+(1, '農特產品'),
+(2, '手工餅乾'),
+(3, '日月潭紀念款'),
+(4, '單品罐裝'),
+(5, '分享包'),
+(6, '袋茶系列'),
+(7, '禮盒系列');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderDetails`
+--
+
+CREATE TABLE `orderDetails` (
+  `orderId` int(5) UNSIGNED ZEROFILL NOT NULL,
+  `productId` int(11) NOT NULL,
+  `quantity` smallint(6) NOT NULL DEFAULT '0',
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `orderDetails`
+--
+
+INSERT INTO `orderDetails` (`orderId`, `productId`, `quantity`, `price`) VALUES
+(00001, 1, 1, '130.00'),
+(00001, 6, 1, '120.00'),
+(00001, 9, 1, '300.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `orderId` int(5) UNSIGNED ZEROFILL NOT NULL,
+  `userId` int(11) NOT NULL,
+  `orderDate` datetime NOT NULL,
+  `shippedDate` datetime DEFAULT NULL,
+  `orderStatusId` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`orderId`, `userId`, `orderDate`, `shippedDate`, `orderStatusId`) VALUES
+(00001, 1, '2020-08-25 10:34:33', NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderStatus`
+--
+
+CREATE TABLE `orderStatus` (
+  `orderStatusId` int(11) NOT NULL,
+  `orderStatusName` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `orderStatus`
+--
+
+INSERT INTO `orderStatus` (`orderStatusId`, `orderStatusName`) VALUES
+(1, '備貨中'),
+(2, '已發貨');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `productId` int(11) NOT NULL,
+  `productName` varchar(40) NOT NULL,
+  `categoryId` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `stock` smallint(6) NOT NULL DEFAULT '0',
+  `description` varchar(100) DEFAULT '',
+  `productImg` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`productId`, `productName`, `categoryId`, `price`, `stock`, `description`, `productImg`) VALUES
+(1, '【日月潭嗆豆】- 芥末花生', 1, '130.00', 10, '成份︱花生、小麥粉(非基因)、玉米澱粉、芥末粉、鹽、糖、棕櫚油、食用色素(黃色4號、藍色1號)', 'p001.jpg'),
+(2, '【日月潭辣豆】- 椒麻花生', 1, '130.00', 20, '成份︱花生、辣椒、花椒、鹽、糖、棕櫚油、麩胺酸鈉、抗氧化劑(維生素E)、甜味劑(庶糖素)', 'p002.jpg'),
+(3, '【日月潭煎餅】- 紅茶拿鐵口味', 1, '130.00', 30, '南部知名伴手禮煎餅，將古早味結合100%日月潭紅茶，除了獨特紅茶葉造型外，餅香濃郁迷人，口感更是酥脆，每一口都吃的到酥、香、脆。', 'p003.jpg'),
+(4, '【日月潭紅茶麵】', 1, '200.00', 30, '以100%日月潭紅茶入麵的真功夫麵條，每一條手工精製而成，不僅每一口功夫絕活料理都是舌尖味蕾上最深刻的牽絆，能品嚐到特殊的紅茶香氣，既有Ｑ彈的口感、略帶嚼勁，不僅味道獨特，更會讓人回味再三。', 'p004.jpg'),
+(5, '【日月潭紅茶梅】', 1, '120.00', 20, '使用SGS檢驗通過的日月潭紅茶當原料及南投縣嚴選在地黃梅，時間自然熟成，醃製過程嚴格把關茶梅品質，讓您品嚐最天然健康的紅茶梅。', 'p005.jpg'),
+(6, '【手工餅乾】-貓舌餅（日月餅）', 2, '120.00', 11, '揉製烘焙、嚴選食材奶香濃郁，口感酥脆，用心烘烤過程成就了餅乾獨特的酥脆口感與風味，選用日月潭100%紅茶粉及進口奶油，片片餅乾真材實料。', 'p006.jpg'),
+(7, '【存錢筒】', 3, '150.00', 10, NULL, 'p007.jpg'),
+(8, '【紀念款】 淨重20g/罐', 3, '230.00', 10, NULL, 'p008.jpg'),
+(9, '【日月潭三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p009.jpg'),
+(10, '【動物三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p010.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `userId` int(11) NOT NULL,
+  `userName` varchar(20) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `address` varchar(40) DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`userId`, `userName`, `email`, `password`, `address`) VALUES
+(1, '陳詩儀', 'jaslin_tan@gmail.com', '5941cd848202ee6aa273aaf9cc6d9af969d74426c238e7acd588b31c4f021321', ''),
+(2, '江家儀', 'yi_chiang@gmail.com', '91e389f015fc00f7b1473a052c8174812c040983c99ab880e9ee3498188458ec', '');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `cartDetails`
+--
+ALTER TABLE `cartDetails`
+  ADD PRIMARY KEY (`cartId`),
+  ADD KEY `fk_users_cart` (`userId`),
+  ADD KEY `fk_products_cd` (`productId`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`categoryId`);
+
+--
+-- Indexes for table `orderDetails`
+--
+ALTER TABLE `orderDetails`
+  ADD KEY `fk_orders_orderDetails` (`orderId`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`orderId`),
+  ADD KEY `fk_users_orders` (`userId`),
+  ADD KEY `fk_orderStatus_orders` (`orderStatusId`);
+
+--
+-- Indexes for table `orderStatus`
+--
+ALTER TABLE `orderStatus`
+  ADD PRIMARY KEY (`orderStatusId`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`productId`),
+  ADD KEY `fk_categories_products` (`categoryId`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userId`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `cartDetails`
+--
+ALTER TABLE `cartDetails`
+  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `categoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `orderId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `orderStatus`
+--
+ALTER TABLE `orderStatus`
+  MODIFY `orderStatusId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `cartDetails`
+--
+ALTER TABLE `cartDetails`
+  ADD CONSTRAINT `fk_products_cd` FOREIGN KEY (`productId`) REFERENCES `products` (`productId`),
+  ADD CONSTRAINT `fk_users_cart` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `orderDetails`
+--
+ALTER TABLE `orderDetails`
+  ADD CONSTRAINT `fk_orders_orderDetails` FOREIGN KEY (`orderId`) REFERENCES `orders` (`orderId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `fk_orderStatus_orders` FOREIGN KEY (`orderStatusId`) REFERENCES `orderStatus` (`orderStatusId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_users_orders` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `fk_categories_products` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`categoryId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
