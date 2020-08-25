@@ -8,25 +8,39 @@
         // echo($hash);
         if($password == $passwordAgain) {
             $hash = hash('sha256', $password);
-            $sql = <<<multi
-                INSERT INTO users
-                (userName, email, password)
-                VALUES
-                ('$userName', '$email', '$hash')
-            multi;
-            // echo($sql);
+            $command = <<<lines
+                SELECT * FROM `users`
+                WHERE email="$email"
+            lines;
             require_once("config.php");
-            // echo($dbname);
             $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
-            mysqli_query($link, $sql);
+            $result = mysqli_query($link, $command);
+            $row = mysqli_fetch_assoc($result);
+            if ($row) {
+                $erracc = "*Email帳號已經註冊";
+            }
+            else {
+                $sql = <<<multi
+                    INSERT INTO users
+                    (userName, email, password)
+                    VALUES
+                    ('$userName', '$email', '$hash')
+                multi;
+                // echo($sql);
+                
+                // echo($dbname);
+                
+                mysqli_query($link, $sql);
 
-            header("Location: index.php");
+                // header("Location: index.php");
+            }
+            
         }
         else {
             $err = "*輸入密碼不一致";
         }
     }
-    
+    mysqli_close($link);
 
 ?>
 <!DOCTYPE html>
@@ -39,7 +53,35 @@
     <script src="scripts/jquery-1.9.1.min.js"></script>
     <title>Sign up form</title>
     <style>
-        .container {
+        body {
+            background-color: #dee9ff;
+        }
+
+        .registration-form {
+            padding: 50px 0;
+        }
+
+        .registration-form form {
+            background-color: #fff;
+            max-width: 600px;
+            margin: auto;
+            padding: 50px 70px;
+            border-radius: 30px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
+        }
+        .registration-form .item{
+            border-radius: 20px;
+            margin-bottom: 25px;
+            padding: 10px 20px;
+        }
+        .registration-form .create-account{
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #5791ff;
+            border: none;
+            color: white;
             margin-top: 20px;
         }
         span {
@@ -49,40 +91,41 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="registration-form">
         <form method="POST" action="">
             <div class="form-group row">
                 <label class="col-4 col-form-label" for="userName">姓名：</label>
                 <div class="col-8">
                     <input id="userName" name="userName" placeholder="請輸入真實姓名" type="text" value="<?= $userName?>" required="required"
-                        class="form-control">
+                        class="form-control item">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="email" class="col-4 col-form-label">Email：</label>
                 <div class="col-8">
-                    <input id="email" name="email" placeholder="請填寫有效的Email" type="email" class="form-control" value="<?= $email?>"
+                    <input id="email" name="email" placeholder="請填寫有效的Email" type="email" class="form-control item" value="<?= $email?>"
                         required="required">
+                    <span><?= $erracc?></span>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="password" class="col-4 col-form-label">密碼：</label>
                 <div class="col-8">
-                    <input id="password" name="password" placeholder="請設定6-15位英數字混合密碼，英文需區分大小寫" type="password"
-                        required="required" class="form-control" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$">
+                    <input id="password" name="password" placeholder="請設定6-15位英數字含大小寫" type="password"
+                        required="required" class="form-control item" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="passwordAgain" class="col-4 col-form-label">確認密碼：</label>
                 <div class="col-8">
                     <input id="passwordAgain" name="passwordAgain" placeholder="請再輸入一次密碼" type="password"
-                        required="required" class="form-control">
+                        required="required" class="form-control item">
+                    <span><?= $err?></span>
                 </div>
             </div>
             <div class="form-group row">
-                <div class="offset-4 col-8">
-                    <button name="submit" type="submit" class="btn btn-success">立即註冊</button>
-                    <span><?= $err?></span>
+                <div class="offset-2 col-8">
+                    <button name="submit" type="submit" class="btn btn-block create-account">立即註冊</button>
                 </div>
             </div>
         </form>

@@ -1,14 +1,5 @@
 <?php
-    session_start();
-    $userName = "";
-    if(isset($_SESSION["userName"])) {
-        $userName = $_SESSION["userName"];
-        // var_dump($userName);
-    }
-    if(isset($_GET["logout"])) {
-        unset($_SESSION["userName"]);
-        header("Location: index.php");
-    }
+    require_once("headeruser.php");
 ?>
 
 <!DOCTYPE html>
@@ -71,14 +62,13 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./shop-grid.html">Shop</a></li>
-                <li><a href="#">Pages</a>
+                <li class="active"><a href="./index.php"> 首頁</a></li>
+                <li><a href="./shop-grid.php">商品</a></li>
+                <li><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
+                        <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                        <li><a href="./checkout.php">Check Out</a></li>
+                        <li><a href="./blog-details.php">Blog Details</a></li>
                     </ul>
                 </li>
                 <li><a href="./blog.html">Blog</a></li>
@@ -163,14 +153,13 @@
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="./index.php">Home</a></li>
-                            <li><a href="./shop-grid.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
+                            <li class="active"><a href="./index.php">首頁</a></li>
+                            <li><a href="./shop-grid.php">商品</a></li>
+                            <li><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                                    <li><a href="./checkout.php">Check Out</a></li>
+                                    <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
                             <li><a href="./blog.html">Blog</a></li>
@@ -181,8 +170,8 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <!-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> -->
+                            <li><a href="shoping-cart.php"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
@@ -728,7 +717,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="./index.php"><img src="img/logo.png" alt=""></a>
                         </div>
                         <ul>
                             <li>Address: 60-49 Road 11378 New York</li>

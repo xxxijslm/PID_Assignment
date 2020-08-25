@@ -1,0 +1,48 @@
+INSERT INTO categories
+(categoryName)
+VALUES
+('農特產品'), ('手工餅乾'), ('日月潭紀念款'), ('單品罐裝'), ('分享包'), ('袋茶系列'), ('禮盒系列')
+
+
+INSERT INTO products
+(productName, categoryId, price, stock, decription, productImg)
+VALUES
+('【日月潭嗆豆】- 芥末花生', '1', '130', '10', '成份︱花生、小麥粉(非基因)、玉米澱粉、芥末粉、鹽、糖、棕櫚油、食用色素(黃色4號、藍色1號)', 'p001.jpg'),
+('【日月潭辣豆】- 椒麻花生', '1', '130', '20', '成份︱花生、辣椒、花椒、鹽、糖、棕櫚油、麩胺酸鈉、抗氧化劑(維生素E)、甜味劑(庶糖素)', 'p002.jpg'),
+('【日月潭煎餅】- 紅茶拿鐵口味', '1', '130', '30', '南部知名伴手禮煎餅，將古早味結合100%日月潭紅茶，除了獨特紅茶葉造型外，餅香濃郁迷人，口感更是酥脆，每一口都吃的到酥、香、脆。', 'p003.jpg'),
+('【日月潭紅茶麵】', '1', '200', '30', '以100%日月潭紅茶入麵的真功夫麵條，每一條手工精製而成，不僅每一口功夫絕活料理都是舌尖味蕾上最深刻的牽絆，能品嚐到特殊的紅茶香氣，既有Ｑ彈的口感、略帶嚼勁，不僅味道獨特，更會讓人回味再三。', 'p004.jpg'),
+('【日月潭紅茶梅】', '1', '120', '20', '使用SGS檢驗通過的日月潭紅茶當原料及南投縣嚴選在地黃梅，時間自然熟成，醃製過程嚴格把關茶梅品質，讓您品嚐最天然健康的紅茶梅。', 'p005.jpg')
+
+INSERT INTO products
+(productName, categoryId, price, stock, decription, productImg)
+VALUES
+('【手工餅乾】-貓舌餅（日月餅）', '2', '120', '11', '揉製烘焙、嚴選食材奶香濃郁，口感酥脆，用心烘烤過程成就了餅乾獨特的酥脆口感與風味，選用日月潭100%紅茶粉及進口奶油，片片餅乾真材實料。','p006.jpg')
+
+INSERT INTO products
+(productName, categoryId, price, stock, decription, productImg)
+VALUES
+('【存錢筒】', '3', '150', '10',null, 'p007.jpg'),
+('【紀念款】 淨重20g/罐', '3', '230', '10',null, 'p008.jpg'),
+('【日月潭三角立體茶包禮盒】', '3', '300', '10',null, 'p009.jpg'),
+('【動物三角立體茶包禮盒】', '3', '300', '10',null, 'p010.jpg')
+
+INSERT INTO orders
+(userId, orderDate)
+VALUES
+(1, current_timestamp())
+
+(orderId, productId, quantity, price)
+VALUES
+(00001, 1, 1, 130),
+(00001, 6, 1, 120),
+(00001, 9, 1, 300)
+
+INSERT INTO orderStatus
+(orderStatusName)
+VALUES
+('備貨中'),('已發貨')
+
+INSERT INTO cartDetails
+(cartId, productId, price, quantity)
+VALUE
+(1, 4, 200, 1)

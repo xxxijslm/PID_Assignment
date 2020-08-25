@@ -1,3 +1,20 @@
+<?php 
+    require_once("headeruser.php");
+    $productId = $_GET["productId"];
+    $cart = $_GET["cart"];
+    $sql = <<<multi
+        SELECT productId, productName, price, p.categoryId, c.categoryName, description, stock
+        FROM products p ,categories c
+        WHERE p.categoryId = c.categoryId AND productId = $productId
+    multi;
+    require_once("config.php");
+    $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+    $result = mysqli_query($link, $sql);
+    $row = mysqli_fetch_assoc($result);
+    // var_dump($row);
+    mysqli_close($link);
+
+?>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -21,6 +38,28 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    </script>
 </head>
 
 <body>
@@ -58,14 +97,13 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./shop-grid.html">Shop</a></li>
-                <li><a href="#">Pages</a>
+                <li class="active"><a href="./index.php"> 首頁</a></li>
+                <li><a href="./shop-grid.php">商品</a></li>
+                <li><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
+                        <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                        <li><a href="./checkout.php">Check Out</a></li>
+                        <li><a href="./blog-details.php">Blog Details</a></li>
                     </ul>
                 </li>
                 <li><a href="./blog.html">Blog</a></li>
@@ -93,7 +131,7 @@
         <div class="header__top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
                                 <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
@@ -101,7 +139,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
@@ -118,9 +156,23 @@
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
-                            <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
-                            </div>
+                            <?php if($userName==null) { ?>
+                                <div class="header__top__right__auth">
+                                    <a href="login.php"><i class="fa fa-user"></i> Login</a>
+                                </div> 
+                                |
+                                <div class="header__top__right__auth">
+                                    <a href="signup.php">SignUp</a>
+                                </div>
+                            <?php } else { ?>
+                                <div class="header__top__right__auth">
+                                    <a href="#"><i class="fa fa-user"></i> <?= $userName ?></a>
+                                </div> 
+                                |
+                                <div class="header__top__right__auth">
+                                    <a href="index.php?logout=1">SignOut</a>
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -130,20 +182,19 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        <a href="./index.php"><img src="img/logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li class="active"><a href="./shop-grid.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
+                            <li ><a href="./index.php">首頁</a></li>
+                            <li ><a href="./shop-grid.php">商品</a></li>
+                            <li class="active"><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                                    <li><a href="./checkout.php">Check Out</a></li>
+                                    <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
                             <li><a href="./blog.html">Blog</a></li>
@@ -154,8 +205,8 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <!-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> -->
+                            <li><a href="shoping-cart.php"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
@@ -179,7 +230,7 @@
                             <span>All departments</span>
                         </div>
                         <ul>
-                            <li><a href="#">Fresh Meat</a></li>
+                            <li><a href="shop-grid.php?categoryId=1">Fresh Meat</a></li>
                             <li><a href="#">Vegetables</a></li>
                             <li><a href="#">Fruit & Nut Gifts</a></li>
                             <li><a href="#">Fresh Berries</a></li>
@@ -227,11 +278,11 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Vegetable’s Package</h2>
+                        <h2><?= $row['productName'] ?></h2>
                         <div class="breadcrumb__option">
-                            <a href="./index.html">Home</a>
-                            <a href="./index.html">Vegetables</a>
-                            <span>Vegetable’s Package</span>
+                            <a href="./index.php">首頁</a>
+                            <a href="./shop-grid.php?categoryId=<?= $row['categoryId']?>"><?= $row['categoryName'] ?></a>
+                            <span><?= $row['productName'] ?></span>
                         </div>
                     </div>
                 </div>
@@ -248,9 +299,9 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="img/product/details/product-details-1.jpg" alt="">
+                                src="img/product/details/<?= $row['productImg'] ?>" alt="">
                         </div>
-                        <div class="product__details__pic__slider owl-carousel">
+                        <!-- <div class="product__details__pic__slider owl-carousel">
                             <img data-imgbigurl="img/product/details/product-details-2.jpg"
                                 src="img/product/details/thumb-1.jpg" alt="">
                             <img data-imgbigurl="img/product/details/product-details-3.jpg"
@@ -259,24 +310,22 @@
                                 src="img/product/details/thumb-3.jpg" alt="">
                             <img data-imgbigurl="img/product/details/product-details-4.jpg"
                                 src="img/product/details/thumb-4.jpg" alt="">
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3>Vetgetable’s Package</h3>
-                        <div class="product__details__rating">
+                        <h3><?= $row['productName'] ?></h3>
+                        <!-- <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
-                        </div>
-                        <div class="product__details__price">$50.00</div>
-                        <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
-                            vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
-                            quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
+                        </div> -->
+                        <div class="product__details__price"><?= NTD.$row['price'] ?></div>
+                        <p><?= $row['description'] ?></p>
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
@@ -284,9 +333,9 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#" class="primary-btn">ADD TO CARD</a>
-                        <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
-                        <ul>
+                        <a href="shop-grid.php?cart=1" class="primary-btn" >加入購物車</a>
+                        <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
+                        <!-- <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
                             <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
                             <li><b>Weight</b> <span>0.5 kg</span></li>
@@ -298,10 +347,14 @@
                                     <a href="#"><i class="fa fa-pinterest"></i></a>
                                 </div>
                             </li>
-                        </ul>
+                        </ul> -->
+                        <button onclick="toastr['success']('成功啦！', '成功');">成功</button><br>
+<button onclick="toastr['info']('資訊來囉！', '資訊');">資訊</button><br>
+<button onclick="toastr['warning']('被警告了！', '警告');">警告</button><br>
+<button onclick="toastr['error']('有什麼錯誤了！', '錯誤');">錯誤</button><br>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                     <div class="product__details__tab">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
@@ -380,14 +433,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
     <!-- Product Details Section End -->
 
     <!-- Related Product Section Begin -->
-    <section class="related-product">
+    <!-- <section class="related-product">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -459,7 +512,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- Related Product Section End -->
 
     <!-- Footer Section Begin -->
@@ -469,7 +522,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="./index.php"><img src="img/logo.png" alt=""></a>
                         </div>
                         <ul>
                             <li>Address: 60-49 Road 11378 New York</li>
