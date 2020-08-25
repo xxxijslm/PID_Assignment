@@ -1,17 +1,31 @@
 <?php 
     require_once("headeruser.php");
+    require_once("config.php");
+    $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
     $productId = $_GET["productId"];
+    $_SESSION["prodoctId"] = $productId;
+    $_SESSION["lastPage"] = "shop-details.php?productId=$productId";
+    // var_dump($_SESSION["prodoctId"]);
+    // echo ($productId);
     $cart = $_GET["cart"];
     $sql = <<<multi
-        SELECT productId, productName, price, p.categoryId, c.categoryName, description, stock
+        SELECT productId, productName, price, p.categoryId, c.categoryName, description, stock, productImg
         FROM products p ,categories c
         WHERE p.categoryId = c.categoryId AND productId = $productId
     multi;
-    require_once("config.php");
-    $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
     $result = mysqli_query($link, $sql);
     $row = mysqli_fetch_assoc($result);
-    // var_dump($row);
+    // var_dump($row["price"]);
+    $price = $row["price"];
+    var_dump($_GET["quantity"]);
+    // if(isset($_GET["cart"])) {
+    //     $cartSql = <<<lines
+    //         INSERT INTO cartDetails
+    //         (userId, productId, price, quantity)
+    //         VALUES
+    //         ($userId, $productId, $price, );
+    //     lines;
+    // }
     mysqli_close($link);
 
 ?>
@@ -38,28 +52,6 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script>
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-    </script>
 </head>
 
 <body>
@@ -299,7 +291,7 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="img/product/details/<?= $row['productImg'] ?>" alt="">
+                                src="img/imgProduct/<?= $row['productImg'] ?>" alt="">
                         </div>
                         <!-- <div class="product__details__pic__slider owl-carousel">
                             <img data-imgbigurl="img/product/details/product-details-2.jpg"
@@ -329,11 +321,17 @@
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+
+                                        <input type="text" name="quantity" id="quantity" value="1">
+
                                 </div>
                             </div>
                         </div>
-                        <a href="shop-grid.php?cart=1" class="primary-btn" >加入購物車</a>
+                        <?php if ($userName != "") { ?>
+                            <a href="shop-details.php?productId=<?= $productId?>&cart=1" class="primary-btn">加入購物車</a>
+                        <?php } else { ?>
+                            <a href="login.php" class="primary-btn">加入購物車</a>
+                        <?php } ?>
                         <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
                         <!-- <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
@@ -348,10 +346,6 @@
                                 </div>
                             </li>
                         </ul> -->
-                        <button onclick="toastr['success']('成功啦！', '成功');">成功</button><br>
-<button onclick="toastr['info']('資訊來囉！', '資訊');">資訊</button><br>
-<button onclick="toastr['warning']('被警告了！', '警告');">警告</button><br>
-<button onclick="toastr['error']('有什麼錯誤了！', '錯誤');">錯誤</button><br>
                     </div>
                 </div>
                 <!-- <div class="col-lg-12">

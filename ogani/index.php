@@ -1,5 +1,6 @@
 <?php
     require_once("headeruser.php");
+    $_SESSION['lastPage'] = "index.php";
 ?>
 
 <!DOCTYPE html>

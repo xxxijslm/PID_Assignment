@@ -1,6 +1,6 @@
 <?php
     session_start();
-    // $_SESSION["lastPage"] = "login.php";
+    $lastPage = $_SESSION["lastPage"];
     if(isset($_POST["submit"])) {
         $email = $_POST["emailTextBox"];
         $password = $_POST["passwordTextBox"];
@@ -18,7 +18,7 @@
             if ($row) {
                 $_SESSION["userName"] = $row["userName"];
                 $_SESSION["userId"] = $row["userId"];
-                header("Location: index.php");
+                header("Location: $lastPage");
             }
             else {
                 $err="帳號或密碼錯誤！請重新輸入";
