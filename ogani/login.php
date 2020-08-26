@@ -21,7 +21,7 @@
                 header("Location: $lastPage");
             }
             else {
-                $err="帳號或密碼錯誤！請重新輸入";
+                $err="帳號未註冊或帳號密碼錯誤！請重新輸入";
             }
         }
     }

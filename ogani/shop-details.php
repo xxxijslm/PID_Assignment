@@ -7,7 +7,6 @@
     $_SESSION["lastPage"] = "shop-details.php?productId=$productId";
     // var_dump($_SESSION["prodoctId"]);
     // echo ($productId);
-    $cart = $_GET["cart"];
     $sql = <<<multi
         SELECT productId, productName, price, p.categoryId, c.categoryName, description, stock, productImg
         FROM products p ,categories c
@@ -15,19 +14,47 @@
     multi;
     $result = mysqli_query($link, $sql);
     $row = mysqli_fetch_assoc($result);
-    // var_dump($row["price"]);
-    $price = $row["price"];
-    var_dump($_GET["quantity"]);
-    // if(isset($_GET["cart"])) {
-    //     $cartSql = <<<lines
-    //         INSERT INTO cartDetails
-    //         (userId, productId, price, quantity)
-    //         VALUES
-    //         ($userId, $productId, $price, );
-    //     lines;
-    // }
-    mysqli_close($link);
+    $price = $row['price'];
+    if(isset($_POST["cartButton"])) {
+        if($userName==null) {
+            header("Location: login.php");
+        }
+        // echo($_POST["quantityTextBox"]);
+        $itemQuantity = $_POST["quantityTextBox"];
+        $checkSql = <<<lines
+            SELECT productId, userId, quantity FROM `cartDetails`
+            WHERE productId=$productId AND userId=$userId
+        lines;
+        $checkResult = mysqli_query($link, $checkSql);
+        $checkRow = mysqli_fetch_assoc($checkResult);
+        if ($checkRow) {
+            $checkQuantity = $checkRow['quantity'];
+            $actualQuantity = $checkQuantity + $itemQuantity;
+            $updateSql = <<<us
+                UPDATE `cartDetails`
+                SET quantity = $actualQuantity
+                WHERE userId=$userId AND productId=$productId
+            us;
+            // echo($updateSql);
+            $updateResult = mysqli_query($link, $updateSql);
+            $message="更新購物車成功";
+            echo "<script type='text/javascript'>alert('$message');</script>";
+        }
+        else {
+            $addSql = <<<add
+                INSERT INTO cartDetails
+                (userId, productId, price, quantity)
+                VALUES
+                ($userId, $productId, $price, $itemQuantity)
+            add;
+            // echo($addSql);
+            $addResult = mysqli_query($link, $addSql);
+            $message="加入購物車成功";
+            echo "<script type='text/javascript'>alert('$message');</script>";
 
+        }
+    }
+    mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -38,6 +65,9 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="build/jquery.min.js"></script>
+    <script src="build/toastr.min.js"></script>
+    <link rel="stylesheet" href="build/toastr.min.css">
     <title>Ogani | Template</title>
 
     <!-- Google Font -->
@@ -89,17 +119,17 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.php"> 首頁</a></li>
-                <li><a href="./shop-grid.php">商品</a></li>
+                <li><a href="./index.php"> 首頁</a></li>
+                <li class="active"><a href="./shop-grid.php">商品</a></li>
                 <li><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                        <li><a href="./shoping-cart.php">購物車</a></li>
                         <li><a href="./checkout.php">Check Out</a></li>
                         <li><a href="./blog-details.php">Blog Details</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="./blog.php">Blog</a></li>
+                <li><a href="./contact.php">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -181,16 +211,16 @@
                     <nav class="header__menu">
                         <ul>
                             <li ><a href="./index.php">首頁</a></li>
-                            <li ><a href="./shop-grid.php">商品</a></li>
-                            <li class="active"><a href="#">頁面</a>
+                            <li class="active"><a href="./shop-grid.php">商品</a></li>
+                            <li><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                                    <li><a href="./shoping-cart.php">購物車</a></li>
                                     <li><a href="./checkout.php">Check Out</a></li>
                                     <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -318,20 +348,22 @@
                         </div> -->
                         <div class="product__details__price"><?= NTD.$row['price'] ?></div>
                         <p><?= $row['description'] ?></p>
-                        <div class="product__details__quantity">
-                            <div class="quantity">
-                                <div class="pro-qty">
-
-                                        <input type="text" name="quantity" id="quantity" value="1">
-
+                        <form method="POST" action="">
+                            <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                            <input type="text" name="quantityTextBox" id="quantityTextBox" value="1">
+                                            <!-- <input type="number" name="quantityTextBox" id="quantityTextBox" min="1" max="5">  -->
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <?php if ($userName != "") { ?>
-                            <a href="shop-details.php?productId=<?= $productId?>&cart=1" class="primary-btn">加入購物車</a>
-                        <?php } else { ?>
-                            <a href="login.php" class="primary-btn">加入購物車</a>
-                        <?php } ?>
+                            <div class="form-group row">
+                                <div class="offset-1">
+                                    <button name="cartButton" type="cartButton" class="btn btn-success">加入購物車</button>
+                                <div>
+                            <div>
+                        </form>
+                        
                         <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
                         <!-- <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>

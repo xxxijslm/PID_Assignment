@@ -92,17 +92,17 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.php"> 首頁</a></li>
-                <li><a href="./shop-grid.php">商品</a></li>
+                <li><a href="./index.php"> 首頁</a></li>
+                <li class="active"><a href="./shop-grid.php">商品</a></li>
                 <li><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                        <li><a href="./shoping-cart.php">購物車</a></li>
                         <li><a href="./checkout.php">Check Out</a></li>
                         <li><a href="./blog-details.php">Blog Details</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="./blog.php">Blog</a></li>
+                <li><a href="./contact.php">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -187,13 +187,13 @@
                             <li class="active"><a href="./shop-grid.php">商品</a></li>
                             <li><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                                    <li><a href="./shoping-cart.php">購物車</a></li>
                                     <li><a href="./checkout.php">Check Out</a></li>
                                     <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contact</a></li>
                         </ul>
                     </nav>
                 </div>

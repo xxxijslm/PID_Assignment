@@ -1,8 +1,29 @@
 <?php
     require_once("headeruser.php");
+    require_once("config.php");
+    $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
     if (!isset($_SESSION["userId"])) {
         header("Location: login.php");
     }
+    // echo($userId);
+    $sql = <<<multi
+        SELECT userId, c.productId, p.productImg, p.productName, quantity, p.price, quantity*p.price as total
+        FROM `cartDetails` c, products p
+        WHERE userId = $userId AND p.productId = c.productId
+        ORDER BY cartId DESC
+    multi;
+    $totalSql = <<< ts
+        SELECT price, quantity, quantity*price as total, SUM(quantity*price) AS sumTotal
+        FROM `cartDetails` c
+        WHERE userId=$userId
+        GROUP BY price, quantity WITH ROLLUP
+    ts;
+    $result = mysqli_query($link, $sql);
+    $totalResult = mysqli_query($link, $totalSql);
+    while ($totalRow = mysqli_fetch_assoc($totalResult)) {
+       
+    };
+    
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -27,6 +48,11 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <style>
+        .img-fluid {
+            max-width: 150px;
+        }
+    </style>
 </head>
 
 <body>
@@ -68,13 +94,13 @@
                 <li><a href="./shop-grid.php">商品</a></li>
                 <li><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                        <li><a href="./shoping-cart.php">購物車</a></li>
                         <li><a href="./checkout.php">Check Out</a></li>
                         <li><a href="./blog-details.php">Blog Details</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="./blog.php">Blog</a></li>
+                <li><a href="./contact.php">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -159,13 +185,13 @@
                             <li><a href="./shop-grid.php">商品</a></li>
                             <li class="active"><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shoping-cart.php">Shoping Cart</a></li>
+                                    <li><a href="./shoping-cart.php">購物車</a></li>
                                     <li><a href="./checkout.php">Check Out</a></li>
                                     <li><a href="./blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contact.php">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -245,10 +271,10 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Shopping Cart</h2>
+                        <h2>購物車</h2>
                         <div class="breadcrumb__option">
-                            <a href="./index.html">Home</a>
-                            <span>Shopping Cart</span>
+                            <a href="./index.php">首頁</a>
+                            <span>購物車</span>
                         </div>
                     </div>
                 </div>
@@ -274,72 +300,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-1.jpg" alt="">
-                                        <h5>Vegetable’s Package</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $55.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
+                                <?php while($row = mysqli_fetch_assoc($result)) { ?>
+                                    <tr>
+                                        <td class="shoping__cart__item">
+                                            <img class="img-fluid" src="img/imgProduct/<?= $row['productImg'] ?>" alt="">
+                                            <h5><?= $row['productName'] ?></h5>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            <?= $row['price'] ?>
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="pro-qty">
+                                                    <input type="text" value="<?= $row['quantity'] ?>">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $110.00
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-2.jpg" alt="">
-                                        <h5>Fresh Garden Vegetable</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $39.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $39.99
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-3.jpg" alt="">
-                                        <h5>Organic Bananas</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $69.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $69.99
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="shoping__cart__total">
+                                            NTD<?= $row['total'] ?>
+                                        </td>
+                                        <td class="shoping__cart__item__close">
+                                            <span class="icon_close"></span>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -348,13 +332,13 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
-                        <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                            Upadate Cart</a>
+                        <a href="shop-grid.php" class="primary-btn cart-btn">繼續購物</a>
+                        <a href="shoping-cart.php" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                            更新購物車</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="shoping__continue">
+                    <!-- <div class="shoping__continue">
                         <div class="shoping__discount">
                             <h5>Discount Codes</h5>
                             <form action="#">
@@ -362,7 +346,7 @@
                                 <button type="submit" class="site-btn">APPLY COUPON</button>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-lg-6">
                     <div class="shoping__checkout">
@@ -386,7 +370,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="./index.php"><img src="img/logo.png" alt=""></a>
                         </div>
                         <ul>
                             <li>Address: 60-49 Road 11378 New York</li>
