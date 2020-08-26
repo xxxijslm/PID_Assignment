@@ -295,30 +295,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while($row = mysqli_fetch_assoc($result)) { ?>
-                                    <tr>
-                                        <td class="shoping__cart__item">
-                                            <img class="img-fluid" src="img/imgProduct/<?= $row['productImg'] ?>" alt="">
-                                            <h5><?= $row['productName'] ?></h5>
-                                        </td>
-                                        <td class="shoping__cart__price">
-                                            <?= $row['price'] ?>
-                                        </td>
-                                        <td class="shoping__cart__quantity">
-                                            <div class="quantity">
-                                                <div class="pro-qty">
-                                                    <input type="text" value="<?= $row['quantity'] ?>">
+                                <form name="form1" method="POST" action="">
+                                    <?php while($row = mysqli_fetch_assoc($result)) { ?>
+                                        <tr>
+                                            <td class="shoping__cart__item">
+                                                <img class="img-fluid" src="img/imgProduct/<?= $row['productImg'] ?>" alt="">
+                                                <h5><?= $row['productName'] ?></h5>
+                                            </td>
+                                            <td class="shoping__cart__price">
+                                                <?= $row['price'] ?>
+                                            </td>
+                                            <td class="shoping__cart__quantity">
+                                                <div class="quantity">
+                                                    <div class="pro-qty">
+                                                        <input type="text" name="quantityTextBox" id="quantityTextBox" value="<?= $row['quantity'] ?>">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="shoping__cart__total">
-                                            NTD<?= $row['total'] ?>
-                                        </td>
-                                        <td class="shoping__cart__item__close">
-                                            <button type="submit" name="cancelButton" id="cancelButton"><span class="icon_close"></span></button>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                                            </td>
+                                            <td class="shoping__cart__total">
+                                                NTD<?= $row['total'] ?>
+                                            </td>
+                                            <td class="shoping__cart__item__close">
+                                                <button type="submit" name="cancelButton" id="cancelButton"><span class="icon_close"></span></button>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </form>
                             </tbody>
                         </table>
                     </div>
@@ -328,7 +330,7 @@
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
                         <a href="shop-grid.php" class="primary-btn cart-btn">繼續購物</a>
-                        <a href="shoping-cart.php" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                        <a href="shoping-cart.php?refresh=1" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
                             更新購物車</a>
                     </div>
                 </div>
