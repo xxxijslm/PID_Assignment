@@ -346,7 +346,7 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
                         </div> -->
-                        <div class="product__details__price"><?= NTD.$row['price'] ?></div>
+                        <div class="product__details__price"><?= "NTD".$row['price'] ?></div>
                         <p><?= $row['description'] ?></p>
                         <form method="POST" action="">
                             <div class="product__details__quantity">

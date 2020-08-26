@@ -353,7 +353,7 @@
                             </li> -->
                             <li>總額
                                 <span>
-                                    <?= NTD . $total ?>
+                                    <?= "NTD" . $total ?>
                                 </span>
                             </li>
                         </ul>

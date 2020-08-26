@@ -61,7 +61,7 @@
                                     <td class="text-center"><?= $row['productId']?></td>
                                     <td><?= $row['productName']?></td>
                                     <td><?= $row['categoryName']?></td>
-                                    <td class="text-right"><?= NTD . $row['price']?></td>
+                                    <td class="text-right"><?= "NTD" . $row['price']?></td>
                                     <td class="text-right"><?= $row['stock']?></td>
                                     <td class="td-actions text-right">
                                         <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm" onclick="location.href='edit.php?productId=<?= $row['productId']?>'"
@@ -69,7 +69,7 @@
                                             <i class="material-icons">edit</i>
                                         </button>
                                         <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
-                                            data-original-title="" title="">
+                                            data-original-title="" title="" onclick="location.href='delete.php?productId=<?= $row['productId']?>'">
                                             <i class="material-icons">close</i>
                                         </button>
                                     </td>

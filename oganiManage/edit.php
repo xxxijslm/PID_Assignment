@@ -28,14 +28,14 @@
         $stock = $_POST["stock"];
         $productImg = $_POST["productImg"];
         $description = $_POST["description"];
-        // $sql = <<<multi
-        //     UPDATE employee
-        //     SET firstName = '$firstName', lastName = '$lastName', cityId = $cityId
-        //     WHERE employeeId = $id
-        // multi;
-        // // echo $sql;
-        // mysqli_query($link, $sql);
-        // header("Location: index.php");
+        $updateSql = <<<us
+            UPDATE products
+            SET productName = '$productName', categoryId = '$categoryId', price = '$price', stock = '$stock', description = '$description', productImg = '$productImg'
+            WHERE productId = $productId
+        us;
+        // echo $updateSql;
+        mysqli_query($link, $updateSql);
+        header("Location: index.php");
     }
     if(isset($_POST["cancelButton"])) {
         header("Location: index.php");
