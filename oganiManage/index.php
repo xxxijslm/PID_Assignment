@@ -32,7 +32,8 @@
 <body>
     <div class="container">
         <div class="title">
-            <h3>商品管理</h3>
+            <h3><a href="index.php" class="active" >商品管理</a>
+            ｜<a href="user.php">會員管理</a></h3>
         </div>
         <div class="row">
             <div class="col-lg-8 col-md-10 ml-auto mr-auto">
@@ -64,11 +65,11 @@
                                     <td class="text-right"><?= "NTD" . $row['price']?></td>
                                     <td class="text-right"><?= $row['stock']?></td>
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm" onclick="location.href='edit.php?productId=<?= $row['productId']?>'"
+                                        <button type="button" rel="tooltip" class="btn btn-success btn-round btn-just-icon btn-sm" onclick="location.href='edit.php?productId=<?= $row['productId']?>'"
                                             data-original-title="" title="">
                                             <i class="material-icons">edit</i>
                                         </button>
-                                        <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
+                                        <button type="button" rel="tooltip" class="btn btn-danger btn-round btn-just-icon btn-sm"
                                             data-original-title="" title="" onclick="location.href='delete.php?productId=<?= $row['productId']?>'">
                                             <i class="material-icons">close</i>
                                         </button>

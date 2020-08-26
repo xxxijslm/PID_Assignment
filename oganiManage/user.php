@@ -2,9 +2,8 @@
     require_once("config.php");
     $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
     $sql = <<<multi
-        SELECT productId, productName, p.categoryId, c.categoryName, price, stock, description, productImg
-        FROM `products` p, categories c
-        WHERE c.categoryId=p.categoryId
+        SELECT userId, userName, email, address 
+        FROM `users`
     multi;
     $result = mysqli_query($link, $sql);
 ?>
@@ -31,45 +30,34 @@
 <body>
     <div class="container">
         <div class="title">
-            <h3>商品管理</h3>
+            <h3><a href="index.php" class="active" >商品管理</a>
+            ｜<a href="user.php">會員管理</a></h3>
         </div>
         <div class="row">
             <div class="col-lg-8 col-md-10 ml-auto mr-auto">
                 <div class="col-md-12">
-                    <button type="button" rel="tooltip" class="btn btn-info btn-sm float-right"
-                                        data-original-title="" title="">
-                                        新增資料
-                    </button>
-                    <h4>商品列表</h4>
+                    <h4>會員管理</h4>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
-                                <th>商品名稱</th>
-                                <th>商品類別</th>
-                                <th class="text-right">商品價格</th>
-                                <th class="text-right">商品庫存</th>
-                                <th class="text-right">商品圖片</th>
+                                <th>會員名稱</th>
+                                <th>Email</th>
+                                <th>地址</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php while($row = mysqli_fetch_assoc($result)) { ?>
                                 <tr>
-                                    <td class="text-center"><?= $row['productId']?></td>
-                                    <td><?= $row['productName']?></td>
-                                    <td><?= $row['categoryName']?></td>
-                                    <td class="text-right"><?= NTD . $row['price']?></td>
-                                    <td class="text-right"><?= $row['stock']?></td>
+                                    <td class="text-center"><?= $row['userId']?></td>
+                                    <td><?= $row['userName']?></td>
+                                    <td><?= $row['email']?></td>
+                                    <td><?= $row['address']?></td>
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
-                                            data-original-title="" title="">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                        <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
-                                            data-original-title="" title="">
-                                            <i class="material-icons">close</i>
+                                        <button type="button" rel="tooltip" class="btn btn-secondary btn-round btn-just-icon btn-sm" data-original-title="" title="">
+                                            <i class="material-icons">person</i>
                                         </button>
                                     </td>
                                 </tr>
