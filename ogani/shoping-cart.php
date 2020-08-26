@@ -1,4 +1,5 @@
 <?php
+    $total = 0;
     require_once("headeruser.php");
     require_once("config.php");
     $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
@@ -12,18 +13,12 @@
         WHERE userId = $userId AND p.productId = c.productId
         ORDER BY cartId DESC
     multi;
-    $totalSql = <<< ts
-        SELECT price, quantity, quantity*price as total, SUM(quantity*price) AS sumTotal
-        FROM `cartDetails` c
-        WHERE userId=$userId
-        GROUP BY price, quantity WITH ROLLUP
-    ts;
     $result = mysqli_query($link, $sql);
-    $totalResult = mysqli_query($link, $totalSql);
+    $totalResult = mysqli_query($link, $sql);
     while ($totalRow = mysqli_fetch_assoc($totalResult)) {
-       
-    };
-    
+        // var_dump($totalRow['total']);
+        $total += $totalRow['total'];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -320,7 +315,7 @@
                                             NTD<?= $row['total'] ?>
                                         </td>
                                         <td class="shoping__cart__item__close">
-                                            <span class="icon_close"></span>
+                                            <button type="submit" name="cancelButton" id="cancelButton"><span class="icon_close"></span></button>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -338,24 +333,31 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <!-- <div class="shoping__continue">
+                    <div class="shoping__continue">
                         <div class="shoping__discount">
-                            <h5>Discount Codes</h5>
+                            <!-- <h5>Discount Codes</h5>
                             <form action="#">
                                 <input type="text" placeholder="Enter your coupon code">
                                 <button type="submit" class="site-btn">APPLY COUPON</button>
-                            </form>
+                            </form> -->
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="shoping__checkout">
-                        <h5>Cart Total</h5>
+                        <h5>購物車總額</h5>
                         <ul>
-                            <li>Subtotal <span>$454.98</span></li>
-                            <li>Total <span>$454.98</span></li>
+                            <!-- <li>Subtotal 
+                                <span>
+                                </span>
+                            </li> -->
+                            <li>總額
+                                <span>
+                                    <?= NTD . $total ?>
+                                </span>
+                            </li>
                         </ul>
-                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        <a href="index.php" class="primary-btn">訂單確認</a>
                     </div>
                 </div>
             </div>

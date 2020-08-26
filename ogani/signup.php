@@ -3,6 +3,7 @@
     if (isset($_POST["submit"])) {
         $userName = $_POST["userName"];
         $email = $_POST["email"];
+        $address = $_POST["address"];
         $password = $_POST["password"];
         $passwordAgain = $_POST["passwordAgain"];  
         // echo($hash);
@@ -22,9 +23,9 @@
             else {
                 $sql = <<<multi
                     INSERT INTO users
-                    (userName, email, password)
+                    (userName, email, password, address)
                     VALUES
-                    ('$userName', '$email', '$hash')
+                    ('$userName', '$email', '$hash', '$address')
                 multi;
                 // echo($sql);
                 
@@ -32,7 +33,7 @@
                 
                 mysqli_query($link, $sql);
 
-                // header("Location: index.php");
+                header("Location: index.php");
             }
             
         }
@@ -108,6 +109,12 @@
                     <span><?= $erracc?></span>
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="address" class="col-4 col-form-label">地址：</label> 
+                <div class="col-8">
+                    <input id="address" name="address" placeholder="請輸入地址" type="text" class="form-control item" required="required">
+                </div>
+            </div> 
             <div class="form-group row">
                 <label for="password" class="col-4 col-form-label">密碼：</label>
                 <div class="col-8">
