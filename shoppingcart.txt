@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Aug 25, 2020 at 09:56 AM
+-- Generation Time: Aug 27, 2020 at 10:19 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.4.2
 
@@ -33,7 +33,7 @@ CREATE TABLE `cartDetails` (
 --
 
 INSERT INTO `cartDetails` (`userId`, `productId`, `price`, `quantity`, `cartId`) VALUES
-(1, 4, '200.00', 1, 1);
+(1, 6, '120.00', 2, 6);
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,12 @@ CREATE TABLE `orderDetails` (
 INSERT INTO `orderDetails` (`orderId`, `productId`, `quantity`, `price`) VALUES
 (00001, 1, 1, '130.00'),
 (00001, 6, 1, '120.00'),
-(00001, 9, 1, '300.00');
+(00001, 9, 1, '300.00'),
+(00002, 2, 1, '130.00'),
+(00002, 6, 1, '120.00'),
+(00002, 10, 1, '300.00'),
+(00003, 4, 6, '200.00'),
+(00003, 3, 1, '130.00');
 
 -- --------------------------------------------------------
 
@@ -100,7 +105,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`orderId`, `userId`, `orderDate`, `shippedDate`, `orderStatusId`) VALUES
-(00001, 1, '2020-08-25 10:34:33', NULL, 1);
+(00001, 1, '2020-08-25 10:34:33', '2020-08-27 14:06:12', 2),
+(00002, 1, '2020-08-27 12:44:40', NULL, 1),
+(00003, 1, '2020-08-27 14:55:50', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -151,7 +158,8 @@ INSERT INTO `products` (`productId`, `productName`, `categoryId`, `price`, `stoc
 (7, '【存錢筒】', 3, '150.00', 10, NULL, 'p007.jpg'),
 (8, '【紀念款】 淨重20g/罐', 3, '230.00', 10, NULL, 'p008.jpg'),
 (9, '【日月潭三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p009.jpg'),
-(10, '【動物三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p010.jpg');
+(10, '【動物三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p010.jpg'),
+(11, '【罐裝飲料】指定口味3箱享優惠', 4, '1700.00', 20, '490ML/瓶*24(1箱)', 'p011.jpg');
 
 -- --------------------------------------------------------
 
@@ -164,16 +172,17 @@ CREATE TABLE `users` (
   `userName` varchar(20) NOT NULL,
   `email` varchar(40) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `address` varchar(40) DEFAULT ''
+  `address` varchar(40) NOT NULL,
+  `block` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userId`, `userName`, `email`, `password`, `address`) VALUES
-(1, '陳詩儀', 'jaslin_tan@gmail.com', '5941cd848202ee6aa273aaf9cc6d9af969d74426c238e7acd588b31c4f021321', ''),
-(2, '江家儀', 'yi_chiang@gmail.com', '91e389f015fc00f7b1473a052c8174812c040983c99ab880e9ee3498188458ec', '');
+INSERT INTO `users` (`userId`, `userName`, `email`, `password`, `address`, `block`) VALUES
+(1, '陳詩儀', 'jaslin_tan@gmail.com', '5941cd848202ee6aa273aaf9cc6d9af969d74426c238e7acd588b31c4f021321', '台中市西屯區櫻花路11號', 0),
+(2, '江家儀', 'yi_chiang@gmail.com', '91e389f015fc00f7b1473a052c8174812c040983c99ab880e9ee3498188458ec', '台中市西屯區市政北路146號', 0);
 
 --
 -- Indexes for dumped tables
@@ -234,7 +243,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cartDetails`
 --
 ALTER TABLE `cartDetails`
-  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -246,7 +255,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `orderId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `orderStatus`
@@ -258,7 +267,7 @@ ALTER TABLE `orderStatus`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -295,4 +304,3 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `fk_categories_products` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`categoryId`) ON DELETE CASCADE ON UPDATE CASCADE;
-
