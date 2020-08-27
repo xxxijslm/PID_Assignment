@@ -27,8 +27,12 @@
     cat;
     $result = mysqli_query($link, $sql);
     $categoryResult = mysqli_query($link, $categorySql);
+    
     $count = mysqli_query($link, $countSql);
     $countResult = mysqli_fetch_assoc($count);
+
+    $categoryResultHeader = mysqli_query($link, $categorySql);
+    $countResultHeader = mysqli_fetch_assoc($categoryResultHeader);
     // var_dump($countResult);
     mysqli_close($link);
 ?>
@@ -216,20 +220,12 @@
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span> 商品種類</span>
                         </div>
                         <ul>
-                            <li><a href="shop-grid.php?categoryId=1">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
+                            <?php while($categoryResultHeaderRow = mysqli_fetch_assoc($categoryResultHeader)) { ?>
+                                <li><a href="shop-grid.php?categoryId=<?= $categoryResultHeaderRow['categoryId']?>"><?= $categoryResultHeaderRow["categoryName"] ?></a></li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </div>

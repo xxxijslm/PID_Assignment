@@ -15,13 +15,18 @@
             $result = mysqli_query($link, $sql);
             $row = mysqli_fetch_assoc($result);
             // var_dump($row["userName"]);
-            if ($row) {
-                $_SESSION["userName"] = $row["userName"];
-                $_SESSION["userId"] = $row["userId"];
-                header("Location: $lastPage");
+            if ($row['block'] == false) {
+                if ($row) {
+                    $_SESSION["userName"] = $row["userName"];
+                    $_SESSION["userId"] = $row["userId"];
+                    header("Location: $lastPage");
+                }
+                else {
+                    $err="帳號未註冊或帳號密碼錯誤！請重新輸入";
+                }
             }
             else {
-                $err="帳號未註冊或帳號密碼錯誤！請重新輸入";
+                $err="會員被停用！";
             }
         }
     }

@@ -38,9 +38,9 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 ml-auto mr-auto">
                 <div class="col-md-12">
-                    <button type="button" rel="tooltip" class="btn btn-info btn-sm float-right"
+                    <button type="button" rel="tooltip" class="btn btn-just-icon btn-info btn-sm float-right"
                                         data-original-title="" title="" onclick="location.href='add.php'">
-                                        新增資料
+                                        <i class="material-icons">fiber_new</i>
                     </button>
                     <h4>商品列表</h4>
                 </div>

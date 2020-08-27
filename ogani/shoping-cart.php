@@ -22,6 +22,7 @@
     if(isset($_GET["refresh"])) {
         // echo("OK");
     }
+    require_once("headerCategory.php");
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -216,20 +217,12 @@
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span> 商品種類</span>
                         </div>
                         <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
+                            <?php while($categoryResultHeaderRow = mysqli_fetch_assoc($categoryResultHeader)) { ?>
+                                <li><a href="shop-grid.php?categoryId=<?= $categoryResultHeaderRow['categoryId']?>"><?= $categoryResultHeaderRow["categoryName"] ?></a></li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </div>
@@ -334,8 +327,8 @@
                     <div class="shoping__cart__btns">
                         <a href="shop-grid.php" class="primary-btn cart-btn">繼續購物</a>
                         <form method="" action="">
-                            <a href="shoping-cart.php?refresh=1" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                                更新購物車</a>
+                            <button class="primary-btn cart-btn cart-btn-right" type="button" id="refreshCartButton"><span class="icon_loading"></span>
+                                更新購物車</button>
                         </form> 
                     </div>
                 </div>
@@ -457,7 +450,14 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
 
-
+        
 </body>
+<script>
+    $("#refreshCartButton").click( function () {
+        alert($("#quantityTextBox").val());
+    })
+    
 
+
+</script>
 </html>
