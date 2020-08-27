@@ -1,3 +1,19 @@
+<?php
+    require_once("headeruser.php");
+    if (!isset($_SESSION["userId"])) {
+        header("Location: login.php");
+    }
+    require_once("config.php");
+    $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+    $sql = <<< multi
+        SELECT o.userId, od.orderId, od.productId, p.productName, p.productImg, quantity, od.price, o.orderDate, o.shippedDate, o.orderStatusId, os.orderStatusName, od.quantity*od.price AS total
+        FROM ((orderDetails od JOIN orders o ON o.orderId = od.orderId) JOIN products p ON p.productId = od.productId) JOIN orderStatus os ON os.orderStatusId = o.orderStatusId WHERE o.userId = $userId ORDER BY o.orderDate DESC
+    multi;
+    // echo($sql);
+    $result = mysqli_query($link, $sql);
+    // $row = mysqli_fetch_assoc($result);
+    // var_dump($row);
+?>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -21,6 +37,12 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <style>
+        .img-fluid {
+            max-width: 150px;
+        }
+    </style>
+    
 </head>
 
 <body>
@@ -58,18 +80,14 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./shop-grid.html">Shop</a></li>
-                <li><a href="#">Pages</a>
+                <li><a href="./index.php"> 首頁</a></li>
+                <li><a href="./shop-grid.php">商品</a></li>
+                <li class="active"><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
+                        <li><a href="./shoping-cart.php">購物車</a></li>
+                        <li><a href="./order-details.php">訂單明細</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -93,7 +111,7 @@
         <div class="header__top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
                                 <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
@@ -101,7 +119,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
@@ -118,9 +136,23 @@
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
-                            <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
-                            </div>
+                            <?php if($userName==null) { ?>
+                                <div class="header__top__right__auth">
+                                    <a href="login.php"><i class="fa fa-user"></i> Login</a>
+                                </div> 
+                                |
+                                <div class="header__top__right__auth">
+                                    <a href="signup.php">SignUp</a>
+                                </div>
+                            <?php } else { ?>
+                                <div class="header__top__right__auth">
+                                    <a href="#"><i class="fa fa-user"></i> <?= $userName ?></a>
+                                </div> 
+                                |
+                                <div class="header__top__right__auth">
+                                    <a href="index.php?logout=1">SignOut</a>
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -130,32 +162,28 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        <a href="./index.php"><img src="img/logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="./index.html">Home</a></li>
-                            <li class="active"><a href="./shop-grid.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
+                            <li><a href="./index.php">首頁</a></li>
+                            <li><a href="./shop-grid.php">商品</a></li>
+                            <li  class="active"><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./shoping-cart.php">購物車</a></li>
+                                    <li><a href="./order-details.php">訂單明細</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <!-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> -->
+                            <li><a href="shoping-cart.php"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
@@ -227,10 +255,10 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Checkout</h2>
+                        <h2>訂單明細</h2>
                         <div class="breadcrumb__option">
-                            <a href="./index.html">Home</a>
-                            <span>Checkout</span>
+                            <a href="./index.php">首頁</a>
+                            <span>訂單明細</span>
                         </div>
                     </div>
                 </div>
@@ -239,130 +267,61 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Checkout Section Begin -->
+    <!-- OrderDetails Section Begin -->
     <section class="checkout spad">
         <div class="container">
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-lg-12">
                     <h6><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code
                     </h6>
                 </div>
-            </div>
+            </div> -->
             <div class="checkout__form">
-                <h4>Billing Details</h4>
-                <form action="#">
+                <h4>訂單明細</h4>
+                <form method="POST" action="">
                     <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Fist Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add">
-                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Town/City<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Country/State<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Postcode / ZIP<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="acc">
-                                    Create an account?
-                                    <input type="checkbox" id="acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <p>Create an account by entering the information below. If you are a returning customer
-                                please login at the top of the page</p>
-                            <div class="checkout__input">
-                                <p>Account Password<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="diff-acc">
-                                    Ship to a different address?
-                                    <input type="checkbox" id="diff-acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Order notes<span>*</span></p>
-                                <input type="text"
-                                    placeholder="Notes about your order, e.g. special notes for delivery.">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h4>Your Order</h4>
-                                <div class="checkout__order__products">Products <span>Total</span></div>
-                                <ul>
-                                    <li>Vegetable’s Package <span>$75.99</span></li>
-                                    <li>Fresh Vegetable <span>$151.99</span></li>
-                                    <li>Organic Bananas <span>$53.99</span></li>
-                                </ul>
-                                <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
-                                <div class="checkout__order__total">Total <span>$750.99</span></div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="acc-or">
-                                        Create an account?
-                                        <input type="checkbox" id="acc-or">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                                    ut labore et dolore magna aliqua.</p>
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Check Payment
-                                        <input type="checkbox" id="payment">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Paypal
-                                        <input type="checkbox" id="paypal">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                        <div class="col-lg-12">
+                            <div class="shoping__cart__table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="shoping__product">商品</th>
+                                                <th>價格</th>
+                                                <th>數量</th>
+                                                <th>金額</th>
+                                                <th>訂單狀態</th>
+                                                <th>下單&出貨時間</th>
+                                            </tr>
+                                        </thead>
+                                        <?php while($row = mysqli_fetch_assoc($result)) { ?>
+                                            <tbody>
+                                                    <tr>
+                                                        <td class="shoping__cart__item">
+                                                            <img class="img-fluid" src="img/imgProduct/<?= $row['productImg'] ?>" alt="">
+                                                            <h5><?= $row['productName'] ?></h5>
+                                                            
+                                                        </td>
+                                                        <td class="shoping__cart__price">
+                                                            <?= $row['price'] ?>
+                                                        </td>
+                                                        <td class="shoping__cart__quantity">
+                                                            <?= $row['quantity'] ?>
+                                                        </td>
+                                                        <td class="shoping__cart__total">
+                                                            NTD<?= $row['total'] ?>
+                                                        </td>
+                                                        <td class="shoping__cart__quantity">
+                                                             <?= $row['orderStatusName'] ?><br>
+                                                        </td>
+                                                        <td class="shoping__cart__quantity">
+                                                             下單：<?= $row['orderDate'] ?><br>
+                                                             出貨：<?= $row['shippedDate']?>
+                                                        </td>
+                                                    </tr>
+                                            </tbody>
+                                        <?php } ?>
+                                    </table>
+                                
                             </div>
                         </div>
                     </div>
@@ -370,7 +329,7 @@
             </div>
         </div>
     </section>
-    <!-- Checkout Section End -->
+    <!-- OrderDetails Section End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
@@ -379,7 +338,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="./index.php"><img src="img/logo.png" alt=""></a>
                         </div>
                         <ul>
                             <li>Address: 60-49 Road 11378 New York</li>

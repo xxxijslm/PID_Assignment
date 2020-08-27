@@ -32,7 +32,6 @@
                 // echo($dbname);
                 
                 mysqli_query($link, $sql);
-
                 header("Location: index.php");
             }
             

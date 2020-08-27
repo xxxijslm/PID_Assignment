@@ -70,12 +70,9 @@
                 <li><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="./shoping-cart.php">購物車</a></li>
-                        <li><a href="./checkout.php">Check Out</a></li>
-                        <li><a href="./blog-details.php">Blog Details</a></li>
+                        <li><a href="./order-details.php">訂單明細</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.php">Blog</a></li>
-                <li><a href="./contact.php">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -161,12 +158,9 @@
                             <li ><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shoping-cart.php">購物車</a></li>
-                                    <li><a href="./checkout.php">Check Out</a></li>
-                                    <li><a href="./blog-details.php">Blog Details</a></li>
+                                    <li><a href="./order-details.php">訂單明細</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.php">Blog</a></li>
-                            <li><a href="./contact.php">Contact</a></li>
                         </ul>
                     </nav>
                 </div>

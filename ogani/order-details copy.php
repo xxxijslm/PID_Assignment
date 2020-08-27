@@ -1,26 +1,43 @@
 <?php
-    $total = 0;
     require_once("headeruser.php");
     require_once("config.php");
     $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
-    if (!isset($_SESSION["userId"])) {
-        header("Location: login.php");
+    if (!isset($_GET["confirm"])) {
+        die("id not found.");
     }
-    // echo($userId);
-    $sql = <<<multi
-        SELECT userId, c.productId, p.productImg, p.productName, quantity, p.price, quantity*p.price as total
-        FROM `cartDetails` c, products p
-        WHERE userId = $userId AND p.productId = c.productId
-        ORDER BY cartId DESC
-    multi;
-    $result = mysqli_query($link, $sql);
-    $totalResult = mysqli_query($link, $sql);
-    while ($totalRow = mysqli_fetch_assoc($totalResult)) {
-        // var_dump($totalRow['total']);
-        $total += $totalRow['total'];
-    }
-    if(isset($_GET["refresh"])) {
-        // echo("OK");
+    $comfirm = $_GET["confirm"];
+    if (! is_numeric ( $comfirm ))
+        die ( "id not a number." );
+
+    if(isset($_GET["confirm"])) {
+        $sql = <<< multi
+            INSERT INTO orders
+            (userId, orderDate)
+            VALUES
+            ($userId, current_timestamp())
+        multi;
+        $result = mysqli_query($link, $sql);
+        $orderSql = <<< os
+            SELECT orderId, userId, orderDate
+            FROM `orders`
+            WHERE userId = $userId
+            ORDER BY orderDate DESC LIMIT 1
+        os;
+        $orderResult = mysqli_query($link, $orderSql);
+        $orderRow = mysqli_fetch_assoc($orderResult);
+        // var_dump ($orderRow);
+        $orderId = $row['orderId'];
+        // $cartSql = <<< cart
+        //     SELECT userId, productId, price, quantity
+        //     FROM `cartDetails`
+        //     WHERE userId = $userId
+        // cart;
+        // $cartResult = mysqli_query($link, $sql);
+        // while ($row = mysqli_fetch_assoc($cartResult)) {
+        //     $orderDetailSql = <<<od
+
+        //     od;
+        // }
     }
 ?>
 <!DOCTYPE html>
@@ -46,15 +63,6 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
-    <style>
-        .img-fluid {
-            max-width: 150px;
-        }
-        .btn-right {
-            position: absolute;
-            right: 20px;
-        }
-    </style>
 </head>
 
 <body>
@@ -93,8 +101,8 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li><a href="./index.php"> 首頁</a></li>
-                <li class="active"><a href="./shop-grid.php">商品</a></li>
-                <li><a href="#">頁面</a>
+                <li><a href="./shop-grid.php">商品</a></li>
+                <li class="active"><a href="#">頁面</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="./shoping-cart.php">購物車</a></li>
                         <li><a href="./order-details.php">訂單明細</a></li>
@@ -181,8 +189,8 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="./index.php">首頁</a></li>
-                            <li class="active"><a href="./shop-grid.php">商品</a></li>
-                            <li ><a href="#">頁面</a>
+                            <li><a href="./shop-grid.php">商品</a></li>
+                            <li  class="active"><a href="#">頁面</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shoping-cart.php">購物車</a></li>
                                     <li><a href="./order-details.php">訂單明細</a></li>
@@ -267,10 +275,10 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>購物車</h2>
+                        <h2>訂單明細</h2>
                         <div class="breadcrumb__option">
                             <a href="./index.php">首頁</a>
-                            <span>購物車</span>
+                            <span>訂單明細</span>
                         </div>
                     </div>
                 </div>
@@ -279,105 +287,58 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Shoping Cart Section Begin -->
-    <section class="shoping-cart spad">
+    <!-- OrderDetails Section Begin -->
+    <section class="checkout spad">
         <div class="container">
-            <form method="POST" action="">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="shoping__cart__table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th class="shoping__product">Products</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while($row = mysqli_fetch_assoc($result)) { ?>
-                                        <tr>
-                                            <td class="shoping__cart__item">
-                                                <img class="img-fluid" src="img/imgProduct/<?= $row['productImg'] ?>" alt="">
-                                                <h5><?= $row['productName'] ?></h5>
-                                            </td>
-                                            <td class="shoping__cart__price">
-                                                <?= $row['price'] ?>
-                                            </td>
-                                            <td class="shoping__cart__quantity">
-                                                <div class="quantity">
-                                                    <div class="pro-qty">
-                                                        <input type="text" name="quantityTextBox" id="quantityTextBox" value="<?= $row['quantity'] ?>">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="shoping__cart__total">
-                                                NTD<?= $row['total'] ?>
-                                            </td>
-                                            <td class="shoping__cart__item__close">
-                                                <button type="button" name="cancelButton" id="cancelButton" onclick="location.href='delete.php?productId=<?= $row['productId'] ?>'"><span class="icon_close"></span></button>
-                                            </td>
-                                        </tr>
-                                        <?php var_dump($row['quantity']); ?>
-                                    <?php } ?>
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-lg-12">
-                    <div class="shoping__cart__btns">
-                        <a href="shop-grid.php" class="primary-btn cart-btn">繼續購物</a>
-                        <form method="" action="">
-                            <a href="shoping-cart.php?refresh=1" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                                更新購物車</a>
-                        </form> 
-                    </div>
+                    <h6><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code
+                    </h6>
                 </div>
-                <!-- <form method="POST" action="">
-                    <div class="col-lg-12">
-                        <div class="shoping__cart__btns">
-                            
+            </div> -->
+            <div class="checkout__form">
+                <h4>訂單明細</h4>
+                <form method="POST" action="">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="shoping__cart__table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <strong>訂單號碼：訂購日期：總額：<strong>
+                                            <th class="shoping__product">商品</th>
+                                            <th>價格</th>
+                                            <th>數量</th>
+                                            <th>金額</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                <td class="shoping__cart__item">
+                                                    <img class="img-fluid" src="img/imgProduct/<?= $row['productImg'] ?>" alt="">
+                                                    <h5><?= $row['productName'] ?></h5>
+                                                </td>
+                                                <td class="shoping__cart__price">
+                                                    <?= $row['price'] ?>
+                                                </td>
+                                                <td class="shoping__cart__quantity">
+                                                    <?= $row['total'] ?>
+                                                </td>
+                                                <td class="shoping__cart__total">
+                                                    NTD<?= $row['total'] ?>
+                                                </td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </form> -->
-                <div class="col-lg-6">
-                    <div class="shoping__continue">
-                        <div class="shoping__discount">
-                            <!-- <h5>Discount Codes</h5>
-                            <form action="#">
-                                <input type="text" placeholder="Enter your coupon code">
-                                <button type="submit" class="site-btn">APPLY COUPON</button>
-                            </form> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="shoping__checkout">
-                        <h5>購物車總額</h5>
-                        <ul>
-                            <!-- <li>Subtotal 
-                                <span>
-                                </span>
-                            </li> -->
-                            <li>總額
-                                <span>
-                                    <?= "NTD" . $total ?>
-                                </span>
-                            </li>
-                        </ul>
-                            <button name="orderButton" type="orderButton" class="primary-btn btn-right" <?= ($total == 0) ? "disabled" : "" ?> onclick="location.href='add.php?confirm=1'">訂單確認</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
-    <!-- Shoping Cart Section End -->
+    <!-- OrderDetails Section End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
@@ -457,6 +418,7 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
 
+ 
 
 </body>
 
