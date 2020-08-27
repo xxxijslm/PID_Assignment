@@ -19,6 +19,7 @@
         // var_dump($totalRow['total']);
         $total += $totalRow['total'];
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -281,21 +282,21 @@
     <!-- Shoping Cart Section Begin -->
     <section class="shoping-cart spad">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="shoping__cart__table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="shoping__product">Products</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <form name="form1" method="POST" action="">
+            <form method="POST" action="">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="shoping__cart__table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="shoping__product">Products</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <?php while($row = mysqli_fetch_assoc($result)) { ?>
                                         <tr>
                                             <td class="shoping__cart__item">
@@ -320,12 +321,12 @@
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                </form>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
