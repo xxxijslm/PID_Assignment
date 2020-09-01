@@ -111,7 +111,7 @@
             <div class="form-group row">
                 <label for="address" class="col-4 col-form-label">地址：</label> 
                 <div class="col-8">
-                    <input id="address" name="address" placeholder="請輸入地址" type="text" class="form-control item" value="<?= $address?> required="required">
+                    <input id="address" name="address" placeholder="請輸入地址" type="text" class="form-control item" value="<?= $address?>" required="required">
                 </div>
             </div> 
             <div class="form-group row">
