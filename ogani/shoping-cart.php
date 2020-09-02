@@ -275,7 +275,7 @@
     <!-- Shoping Cart Section Begin -->
     <section class="shoping-cart spad">
         <div class="container">
-            <form method="POST" action="">
+            <form method="POST" action="" id="cartform">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="shoping__cart__table">
@@ -302,7 +302,7 @@
                                             <td class="shoping__cart__quantity">
                                                 <div class="quantity">
                                                     <div class="pro-qty">
-                                                        <input type="text" name="quantityTextBox" id="quantityTextBox" value="<?= $row['quantity'] ?>">
+                                                        <input id="quantityTextBox" name="quantityTextBox" type="text" value="<?= $row['quantity'] ?>">
                                                     </div>
                                                 </div>
                                             </td>
@@ -313,7 +313,12 @@
                                                 <button type="button" name="cancelButton" id="cancelButton" onclick="location.href='delete.php?productId=<?= $row['productId'] ?>'"><span class="icon_close"></span></button>
                                             </td>
                                         </tr>
-                                        <?php var_dump($row['quantity']); ?>
+                                        <?php
+                                            // var_dump($row['quantity']); 
+                                        
+                                        
+                                        
+                                        ?>
                                     <?php } ?>
                                     
                                 </tbody>
@@ -454,7 +459,26 @@
 </body>
 <script>
     $("#refreshCartButton").click( function () {
-        alert($("#quantityTextBox").val());
+        // alert($("#quantityTextBox").val());
+        var input = new Array();
+        var i = 0;
+        $("#cartform input").each(function () {
+            // alert($(this).val());
+            input[i] = $(this).val();
+            i++
+        }) 
+        // alert(input);
+        $.ajax( {
+            url: "message.php",
+            type: "POST",
+            data: {1:input},
+            error: function() {
+                alert("失敗");
+            },
+            success: function(e) {
+                alert(e);
+            }
+        })
     })
     
 
