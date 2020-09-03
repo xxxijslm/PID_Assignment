@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Aug 27, 2020 at 10:19 AM
+-- Generation Time: Sep 03, 2020 at 08:57 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.4.2
 
@@ -27,13 +27,6 @@ CREATE TABLE `cartDetails` (
   `quantity` smallint(6) NOT NULL DEFAULT '0',
   `cartId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `cartDetails`
---
-
-INSERT INTO `cartDetails` (`userId`, `productId`, `price`, `quantity`, `cartId`) VALUES
-(1, 6, '120.00', 2, 6);
 
 -- --------------------------------------------------------
 
@@ -84,7 +77,12 @@ INSERT INTO `orderDetails` (`orderId`, `productId`, `quantity`, `price`) VALUES
 (00002, 6, 1, '120.00'),
 (00002, 10, 1, '300.00'),
 (00003, 4, 6, '200.00'),
-(00003, 3, 1, '130.00');
+(00003, 3, 1, '130.00'),
+(00004, 6, 2, '120.00'),
+(00005, 6, 2, '120.00'),
+(00005, 4, 1, '200.00'),
+(00006, 3, 3, '130.00'),
+(00007, 1, 10, '130.00');
 
 -- --------------------------------------------------------
 
@@ -106,8 +104,12 @@ CREATE TABLE `orders` (
 
 INSERT INTO `orders` (`orderId`, `userId`, `orderDate`, `shippedDate`, `orderStatusId`) VALUES
 (00001, 1, '2020-08-25 10:34:33', '2020-08-27 14:06:12', 2),
-(00002, 1, '2020-08-27 12:44:40', NULL, 1),
-(00003, 1, '2020-08-27 14:55:50', NULL, 1);
+(00002, 1, '2020-08-27 12:44:40', '2020-09-03 13:50:39', 2),
+(00003, 1, '2020-08-27 14:55:50', '2020-09-03 13:55:20', 2),
+(00004, 3, '2020-09-01 11:23:04', '2020-09-03 14:48:41', 2),
+(00005, 1, '2020-09-03 09:12:10', NULL, 1),
+(00006, 2, '2020-09-03 14:03:11', NULL, 1),
+(00007, 1, '2020-09-03 14:44:32', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -149,7 +151,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`productId`, `productName`, `categoryId`, `price`, `stock`, `description`, `productImg`) VALUES
-(1, '【日月潭嗆豆】- 芥末花生', 1, '130.00', 10, '成份︱花生、小麥粉(非基因)、玉米澱粉、芥末粉、鹽、糖、棕櫚油、食用色素(黃色4號、藍色1號)', 'p001.jpg'),
+(1, '【日月潭嗆豆】- 芥末花生', 1, '130.00', 0, '成份︱花生、小麥粉(非基因)、玉米澱粉、芥末粉、鹽、糖、棕櫚油、食用色素(黃色4號、藍色1號)', 'p001.jpg'),
 (2, '【日月潭辣豆】- 椒麻花生', 1, '130.00', 20, '成份︱花生、辣椒、花椒、鹽、糖、棕櫚油、麩胺酸鈉、抗氧化劑(維生素E)、甜味劑(庶糖素)', 'p002.jpg'),
 (3, '【日月潭煎餅】- 紅茶拿鐵口味', 1, '130.00', 30, '南部知名伴手禮煎餅，將古早味結合100%日月潭紅茶，除了獨特紅茶葉造型外，餅香濃郁迷人，口感更是酥脆，每一口都吃的到酥、香、脆。', 'p003.jpg'),
 (4, '【日月潭紅茶麵】', 1, '200.00', 30, '以100%日月潭紅茶入麵的真功夫麵條，每一條手工精製而成，不僅每一口功夫絕活料理都是舌尖味蕾上最深刻的牽絆，能品嚐到特殊的紅茶香氣，既有Ｑ彈的口感、略帶嚼勁，不僅味道獨特，更會讓人回味再三。', 'p004.jpg'),
@@ -158,8 +160,7 @@ INSERT INTO `products` (`productId`, `productName`, `categoryId`, `price`, `stoc
 (7, '【存錢筒】', 3, '150.00', 10, NULL, 'p007.jpg'),
 (8, '【紀念款】 淨重20g/罐', 3, '230.00', 10, NULL, 'p008.jpg'),
 (9, '【日月潭三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p009.jpg'),
-(10, '【動物三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p010.jpg'),
-(11, '【罐裝飲料】指定口味3箱享優惠', 4, '1700.00', 20, '490ML/瓶*24(1箱)', 'p011.jpg');
+(10, '【動物三角立體茶包禮盒】', 3, '300.00', 10, NULL, 'p010.jpg');
 
 -- --------------------------------------------------------
 
@@ -182,7 +183,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`userId`, `userName`, `email`, `password`, `address`, `block`) VALUES
 (1, '陳詩儀', 'jaslin_tan@gmail.com', '5941cd848202ee6aa273aaf9cc6d9af969d74426c238e7acd588b31c4f021321', '台中市西屯區櫻花路11號', 0),
-(2, '江家儀', 'yi_chiang@gmail.com', '91e389f015fc00f7b1473a052c8174812c040983c99ab880e9ee3498188458ec', '台中市西屯區市政北路146號', 0);
+(2, '江家儀', 'yi_chiang@gmail.com', '91e389f015fc00f7b1473a052c8174812c040983c99ab880e9ee3498188458ec', '台中市西屯區市政北路146號', 0),
+(3, '陳雨星', 'smilefun@gmail.com', '5941cd848202ee6aa273aaf9cc6d9af969d74426c238e7acd588b31c4f021321', '南投縣埔里鎮大學路1號', 1);
 
 --
 -- Indexes for dumped tables
@@ -243,7 +245,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cartDetails`
 --
 ALTER TABLE `cartDetails`
-  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -255,7 +257,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `orderId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `orderStatus`
@@ -267,13 +269,13 @@ ALTER TABLE `orderStatus`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
