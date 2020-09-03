@@ -42,41 +42,31 @@
     <title>Log In Form</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        body{
-            background-color: #dee9ff;
-        }
-        .registration-form{
-            padding: 50px 0;
-        }
-        .registration-form form{
-            background-color: #fff;
-            max-width: 600px;
-            margin: auto;
-            padding: 50px 70px;
-            border-radius: 30px;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
-        }
-        span {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="css/formStyle.css" type="text/css">
 </head>
 
 <body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <h3 style="text-align: center">登入</h3>
     <div class="registration-form">
         <form method="POST" action="">
+            
             <div class="form-group row">
-                <label for="email" class="col-4 col-form-label">帳號：</label>
+                <label for="emailTextBox" class="col-4 col-form-label">帳號：</label>
                 <div class="col-8">
                     <input id="emailTextBox" name="emailTextBox" placeholder="Email" type="email" class="form-control" value="<?= $email?>" required="required">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="password" class="col-4 col-form-label">密碼：</label>
+                <label for="passwordTextBox" class="col-4 col-form-label">密碼：</label>
                 <div class="col-8">
                     <input id="passwordTextBox" name="passwordTextBox" placeholder="請輸入密碼" type="password" required="required"
                         class="form-control">
+                    <input id ="passwordCheckBox" name="passwordCheckBox" type="checkbox" onclick="showPass()">
+                    <label for="passwordCheckBox">顯示密碼</label>
                 </div>
             </div>
             <div class="form-group row">
@@ -88,7 +78,26 @@
             </div>
         </form>
     </div>
-    
-</body>
 
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+<script>
+    function showPass() {
+        var x = document.getElementById("passwordTextBox");
+        if (x.type === "password") {
+            x.type = "text";
+        } 
+        else {
+            x.type = "password";
+        }
+    }
+</script>
 </html>

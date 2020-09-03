@@ -32,7 +32,7 @@
                 // echo($dbname);
                 
                 mysqli_query($link, $sql);
-                header("Location: index.php");
+                echo "<script>alert('提示：註冊成功！'); location.href = 'index.php';</script>";
             }
             
         }
@@ -51,46 +51,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="scripts/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" href="css/formStyle.css" type="text/css">
     <title>Sign up form</title>
-    <style>
-        body {
-            background-color: #dee9ff;
-        }
-
-        .registration-form {
-            padding: 50px 0;
-        }
-
-        .registration-form form {
-            background-color: #fff;
-            max-width: 600px;
-            margin: auto;
-            padding: 50px 70px;
-            border-radius: 30px;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
-        }
-        .registration-form .item{
-            border-radius: 20px;
-            margin-bottom: 25px;
-            padding: 10px 20px;
-        }
-        .registration-form .create-account{
-            border-radius: 30px;
-            padding: 10px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            background-color: #5791ff;
-            border: none;
-            color: white;
-            margin-top: 20px;
-        }
-        span {
-            color: red;
-        }
-    </style>
 </head>
 
 <body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <h3 style="text-align: center">註冊</h3>
     <div class="registration-form">
         <form method="POST" action="">
             <div class="form-group row">
@@ -119,6 +89,8 @@
                 <div class="col-8">
                     <input id="password" name="password" placeholder="請設定6-15位英數字含大小寫" type="password"
                         required="required" class="form-control item" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}$">
+                        <input id ="passwordCheckBox" name="passwordCheckBox" type="checkbox" onclick="showPass()">
+                        <label for="passwordCheckBox">顯示密碼</label>
                 </div>
             </div>
             <div class="form-group row">
@@ -136,6 +108,25 @@
             </div>
         </form>
     </div>
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
-
+<script>
+    function showPass() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } 
+        else {
+            x.type = "password";
+        }
+    }
+</script>
 </html>

@@ -727,7 +727,7 @@ ol {
 }
 
 .hero__item {
-	height: 431px;
+	height: 500px;
 	display: flex;
 	align-items: center;
 	padding-left: 75px;
@@ -738,7 +738,7 @@ ol {
 	text-transform: uppercase;
 	font-weight: 700;
 	letter-spacing: 4px;
-	color: #7fad39;
+	color: #6f6f6f;
 }
 
 .hero__text h2 {

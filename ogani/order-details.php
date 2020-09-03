@@ -5,6 +5,7 @@
     }
     require_once("config.php");
     $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+    require_once("block.php");
     $sql = <<< multi
         SELECT o.userId, od.orderId, od.productId, p.productName, p.productImg, quantity, od.price, o.orderDate, o.shippedDate, o.orderStatusId, os.orderStatusName, od.quantity*od.price AS total
         FROM ((orderDetails od JOIN orders o ON o.orderId = od.orderId) JOIN products p ON p.productId = od.productId) JOIN orderStatus os ON os.orderStatusId = o.orderStatusId WHERE o.userId = $userId ORDER BY o.orderDate DESC
@@ -53,20 +54,20 @@
     </div>
 
     <!-- Humberger Begin -->
-    <div class="humberger__menu__overlay"></div>
+     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
             <a href="#"><img src="img/logo.png" alt=""></a>
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                <!-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> -->
+                <!-- <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> -->
             </ul>
-            <div class="header__cart__price">item: <span>$150.00</span></div>
+            <!-- <div class="header__cart__price">item: <span>$150.00</span></div> -->
         </div>
         <div class="humberger__menu__widget">
-            <div class="header__top__right__language">
+            <!-- <div class="header__top__right__language">
                 <img src="img/language.png" alt="">
                 <div>English</div>
                 <span class="arrow_carrot-down"></span>
@@ -74,9 +75,9 @@
                     <li><a href="#">Spanis</a></li>
                     <li><a href="#">English</a></li>
                 </ul>
-            </div>
+            </div> -->
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+                <a href="#"><i class="fa fa-user"></i> 登入</a>
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -100,8 +101,8 @@
         </div>
         <div class="humberger__menu__contact">
             <ul>
-                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                <li>Free Shipping for all Order of $99</li>
+                <li><i class="fa fa-envelope"></i> shopping@cart.com</li>
+                <li>所有商品免運費</li>
             </ul>
         </div>
     </div>
@@ -115,8 +116,8 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                                <li>Free Shipping for all Order of $99</li>
+                                <li><i class="fa fa-envelope"></i> shopping@cart.com</li>
+                                <li>所有商品免運費</li>
                             </ul>
                         </div>
                     </div>
@@ -128,7 +129,7 @@
                                 <a href="#"><i class="fa fa-linkedin"></i></a>
                                 <a href="#"><i class="fa fa-pinterest-p"></i></a>
                             </div>
-                            <div class="header__top__right__language">
+                            <!-- <div class="header__top__right__language">
                                 <img src="img/language.png" alt="">
                                 <div>English</div>
                                 <span class="arrow_carrot-down"></span>
@@ -136,14 +137,14 @@
                                     <li><a href="#">Spanis</a></li>
                                     <li><a href="#">English</a></li>
                                 </ul>
-                            </div>
+                            </div> -->
                             <?php if($userName==null) { ?>
                                 <div class="header__top__right__auth">
-                                    <a href="login.php"><i class="fa fa-user"></i> Login</a>
+                                    <a href="login.php"><i class="fa fa-user"></i> 登入</a>
                                 </div> 
                                 |
                                 <div class="header__top__right__auth">
-                                    <a href="signup.php">SignUp</a>
+                                    <a href="signup.php" target="_blank">註冊</a>
                                 </div>
                             <?php } else { ?>
                                 <div class="header__top__right__auth">
@@ -151,7 +152,7 @@
                                 </div> 
                                 |
                                 <div class="header__top__right__auth">
-                                    <a href="index.php?logout=1">SignOut</a>
+                                    <a href="index.php?logout=1">登出</a>
                                 </div>
                             <?php } ?>
                         </div>
@@ -184,9 +185,9 @@
                     <div class="header__cart">
                         <ul>
                             <!-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> -->
-                            <li><a href="shoping-cart.php"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="shoping-cart.php"><i class="fa fa-shopping-bag"></i></a></li>
                         </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                        <!-- <div class="header__cart__price">item: <span>$150.00</span></div> -->
                     </div>
                 </div>
             </div>
@@ -219,11 +220,11 @@
                         <div class="hero__search__form">
                             <form action="#">
                                 <div class="hero__search__categories">
-                                    All Categories
+                                    所有商品
                                     <span class="arrow_carrot-down"></span>
                                 </div>
                                 <input type="text" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
+                                <button type="submit" class="site-btn">搜尋</button>
                             </form>
                         </div>
                         <div class="hero__search__phone">
@@ -232,7 +233,7 @@
                             </div>
                             <div class="hero__search__phone__text">
                                 <h5>+65 11.188.888</h5>
-                                <span>support 24/7 time</span>
+                                <span>24小時服務</span>
                             </div>
                         </div>
                     </div>

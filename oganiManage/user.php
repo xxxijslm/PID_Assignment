@@ -60,6 +60,10 @@
                                     <td><?= $row['email']?></td>
                                     <td><?= $row['address']?></td>
                                     <td class="td-actions text-right">
+                                        <button type="button" rel="tooltip" class="btn btn-secondory btn-round btn-just-icon btn-sm" onclick="location.href='useredit.php?userId=<?= $row['userId']?>'"
+                                            data-original-title="" title="">
+                                            <i class="material-icons">edit</i>
+                                        </button>
                                         <button type="button" rel="tooltip" class="btn btn-round btn-just-icon btn-sm"
                                             data-original-title="" title="" onclick="location.href='order.php?userId=<?= $row['userId']?>'">
                                             <i class="material-icons">reorder</i>

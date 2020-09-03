@@ -9,17 +9,27 @@
     require_once("config.php");
     $link = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
     $sql = <<< multi
-    SELECT o.userId, u.userName, u.email, od.orderId, od.productId, p.productName, quantity, od.price, o.orderDate, o.shippedDate, o.orderStatusId, os.orderStatusName, od.quantity*od.price AS total
-    FROM (((orderDetails od JOIN orders o ON o.orderId = od.orderId)
-    JOIN products p ON p.productId = od.productId)
-    JOIN orderStatus os ON os.orderStatusId = o.orderStatusId)
-    JOIN users u ON u.userId = o.userId
-    WHERE o.userId = $userId
-    ORDER BY o.orderDate DESC
+        SELECT o.userId, u.userName, u.email, od.orderId, od.productId, p.productName, quantity, od.price, o.orderDate, o.shippedDate, o.orderStatusId, os.orderStatusName, od.quantity*od.price AS total
+        FROM (((orderDetails od JOIN orders o ON o.orderId = od.orderId)
+        JOIN products p ON p.productId = od.productId)
+        JOIN orderStatus os ON os.orderStatusId = o.orderStatusId)
+        JOIN users u ON u.userId = o.userId
+        WHERE o.userId = $userId
+        ORDER BY o.orderDate DESC
     multi;
     $result = mysqli_query($link, $sql);
     $row = mysqli_fetch_assoc($result);
-    // var_dump($row);
+    $result2 = mysqli_query($link, $sql);
+    if(isset($_POST['shipButton'])) {
+        $orderId = $_POST['orderId'];
+        $orderSql = <<< os
+            UPDATE orders
+            SET orderStatusId = 2, shippedDate = CURRENT_TIMESTAMP()
+            WHERE orderId = $orderId
+        os;
+        mysqli_query($link, $orderSql);
+        header("refresh: 0");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,6 +62,16 @@
                 <div class="col-md-12">
                     <h4>訂單列表</h4>
                     <h4><?= $row['userName'] . " " . $row['email']?><h4>
+                    <form method="POST" action="">
+                        <div class="float-right">
+                            <label for="orderId">出貨訂單編號：</lable>
+                            <input id="orderId" name="orderId">
+                            <button type="submit" id="shipButton" name="shipButton" rel="tooltip" class="btn btn-warning btn-round btn-just-icon btn-sm"
+                                                data-original-title="" title="">
+                                                <i class="material-icons">local_shipping</i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -68,16 +88,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while($row = mysqli_fetch_assoc($result)) { ?>
+                            <?php while($row2 = mysqli_fetch_assoc($result2)) { ?>
                                 <tr>
-                                    <td class="text-center"><?= $row['orderId']?></td>
-                                    <td class="text-center"><?= $row['productId']?></td>
-                                    <td><?= $row['productName']?></td>
-                                    <td class="text-right"><?= $row['quantity']?></td>
-                                    <td class="text-right"><?= "NTD" . $row['total']?></td>
-                                    <td class="text-right"><?= $row['orderDate']?></td>
-                                    <td class="text-right"><?= $row['shippedDate']?></td>
-                                    <td class="text-right"><?= $row['orderStatusName']?></td>
+                                    <td class="text-center"><?= $row2['orderId']?></td>
+                                    <td class="text-center"><?= $row2['productId']?></td>
+                                    <td><?= $row2['productName']?></td>
+                                    <td class="text-right"><?= $row2['quantity']?></td>
+                                    <td class="text-right"><?= "NTD" . $row2['total']?></td>
+                                    <td class="text-right"><?= $row2['orderDate']?></td>
+                                    <td class="text-right"><?= $row2['shippedDate']?></td>
+                                    <td class="text-right"><?= $row2['orderStatusName']?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

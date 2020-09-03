@@ -10,6 +10,38 @@
         die ( "id not a number." );
 
     if(isset($_GET["confirm"])) {
+        $cartSql = <<< cart
+            SELECT userId, productId, price, quantity
+            FROM `cartDetails`
+            WHERE userId = $userId
+        cart;       
+        $cartResultForStock = mysqli_query($link, $cartSql);
+        while ($cartRowForStock = mysqli_fetch_assoc($cartResultForStock)) {
+            $productIdForStock = $cartRowForStock['productId'];
+            $quantityForStock = $cartRowForStock['quantity'];
+            $productStockSql = <<<ps
+                SELECT productName, stock 
+                FROM `products` 
+                WHERE productId = $productIdForStock
+            ps;
+            $productStockResult = mysqli_query($link, $productStockSql);
+            $productStockRow = mysqli_fetch_assoc($productStockResult);
+            $productName = $productStockRow['productName'];
+            $stock = $productStockRow['stock'];
+            if ($stock < $quantityForStock) {
+                echo "<script>alert('警告：$productName 庫存剩下 $stock ，請更新購物車'); location.href = 'shoping-cart.php';</script>";
+                exit();
+            }
+            else {
+                $remainder = $stock - $quantityForStock;
+                $updateStockSql = <<<us
+                    UPDATE products
+                    SET stock = $remainder
+                    WHERE productId = $productIdForStock
+                us;
+                mysqli_query($link, $updateStockSql);
+            }
+        }
         $sql = <<< multi
             INSERT INTO orders
             (userId, orderDate)
@@ -27,11 +59,6 @@
         $orderRow = mysqli_fetch_assoc($orderResult);
         // var_dump ($orderRow['orderId']);
         $orderId = $orderRow['orderId'];
-        $cartSql = <<< cart
-            SELECT userId, productId, price, quantity
-            FROM `cartDetails`
-            WHERE userId = $userId
-        cart;
         $cartResult = mysqli_query($link, $cartSql);
         while ($cartRow = mysqli_fetch_assoc($cartResult)) {
             $productId = $cartRow['productId'];
